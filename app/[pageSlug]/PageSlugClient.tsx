@@ -22,7 +22,7 @@ import { GallerySection } from '@/app/components/sections/GallerySection';
 import { ContactSection } from '@/app/components/sections/ContactSection';
 import { BlogSection } from '@/app/components/sections/BlogSection';
 import api from '@/app/lib/fetch-api';
-import { ServiceAreaPage } from '@/app/lib/types';
+import { Page, ServiceAreaPage } from '@/app/lib/types';
 
 interface PageSlugClientProps {
   pageSlug: string;
@@ -93,7 +93,8 @@ export default function PageSlugClient({ pageSlug: pageSlugProp }: PageSlugClien
     );
   }
 
-  const pageType = 'pageType' in displayPage ? displayPage.pageType : undefined;
+  const page: Page | null = currentPage;
+  const pageType = page?.pageType;
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: themeColors.pageBackground }}>
@@ -102,60 +103,60 @@ export default function PageSlugClient({ pageSlug: pageSlugProp }: PageSlugClien
       <main>
         {pageType === 'home' && (
           <>
-            <HeroSection hero={displayPage.hero} />
-            <AboutSection aboutSection={displayPage.aboutSection} />
-            <ServicesSection servicesSection={displayPage.servicesSection} />
-            <GallerySection gallerySection={displayPage.gallerySection} />
-            <TestimonialsSection testimonialsSection={displayPage.testimonialsSection} />
-            <FAQSection faqSection={displayPage.faqSection} />
-            <ContactSection contactSection={displayPage.contactSection} />
-            <BlogSection blogSection={displayPage.blogSection} />
-            <CTASection ctaSection={displayPage.ctaSection} />
-            <WhyChooseUsSection whyChooseUsSection={displayPage.whyChooseUsSection} />
-            <CompanyDetailSection companyDetailSection={displayPage.companyDetailSection} />
-            <ProjectsSection projectsSection={displayPage.projectsSection} />
-            <CTA2Section cta2Section={displayPage.cta2Section} />
-            <CTA3Section cta3Section={displayPage.cta3Section} />
+            <HeroSection hero={page?.hero} />
+            <AboutSection aboutSection={page?.aboutSection} />
+            <ServicesSection servicesSection={page?.servicesSection} />
+            <GallerySection gallerySection={page?.gallerySection} />
+            <TestimonialsSection testimonialsSection={page?.testimonialsSection} />
+            <FAQSection faqSection={page?.faqSection} />
+            <ContactSection contactSection={page?.contactSection} />
+            <BlogSection blogSection={page?.blogSection} />
+            <CTASection ctaSection={page?.ctaSection} />
+            <WhyChooseUsSection whyChooseUsSection={page?.whyChooseUsSection} />
+            <CompanyDetailSection companyDetailSection={page?.companyDetailSection} />
+            <ProjectsSection projectsSection={page?.projectsSection} />
+            <CTA2Section cta2Section={page?.cta2Section} />
+            <CTA3Section cta3Section={page?.cta3Section} />
           </>
         )}
 
         {pageType === 'about' && (
           <>
-            <HeroSection hero={displayPage.hero} />
-            <AboutSection aboutSection={displayPage.aboutSection} />
-            <WhyChooseUsSection whyChooseUsSection={displayPage.whyChooseUsSection} />
-            <CompanyDetailSection companyDetailSection={displayPage.companyDetailSection} />
-            <CTA2Section cta2Section={displayPage.cta2Section} />
+            <HeroSection hero={page?.hero} />
+            <AboutSection aboutSection={page?.aboutSection} />
+            <WhyChooseUsSection whyChooseUsSection={page?.whyChooseUsSection} />
+            <CompanyDetailSection companyDetailSection={page?.companyDetailSection} />
+            <CTA2Section cta2Section={page?.cta2Section} />
           </>
         )}
 
         {pageType === 'contact' && (
           <>
-            <HeroSection hero={displayPage.hero} />
-            <ContactSection contactSection={displayPage.contactSection} />
+            <HeroSection hero={page?.hero} />
+            <ContactSection contactSection={page?.contactSection} />
           </>
         )}
 
         {pageType === 'service-list' && (
           <>
-            <HeroSection hero={displayPage.hero} />
-            <ServicesSection servicesSection={displayPage.servicesSection} />
+            <HeroSection hero={page?.hero} />
+            <ServicesSection servicesSection={page?.servicesSection} />
           </>
         )}
 
         {pageType === 'blog-list' && (
           <>
-            <HeroSection hero={displayPage.hero} />
-            <BlogSection blogSection={displayPage.blogSection} />
+            <HeroSection hero={page?.hero} />
+            <BlogSection blogSection={page?.blogSection} />
           </>
         )}
 
-        {pageType === 'project-detail' && <HeroSection hero={displayPage.hero} />}
+        {pageType === 'project-detail' && <HeroSection hero={page?.hero} />}
 
-        {(pageType === 'testimonials' || displayPage.slug === 'testimonials') && (
+        {page?.slug === 'testimonials' && (
           <>
-            <HeroSection hero={displayPage.hero} />
-            <TestimonialsSection testimonialsSection={displayPage.testimonialsSection} />
+            <HeroSection hero={page?.hero} />
+            <TestimonialsSection testimonialsSection={page?.testimonialsSection} />
           </>
         )}
       </main>

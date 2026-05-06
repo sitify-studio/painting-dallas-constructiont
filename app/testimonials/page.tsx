@@ -9,9 +9,7 @@ import { TestimonialsSection } from '@/app/components/sections/TestimonialsSecti
 
 export default function TestimonialsPage() {
   const { pages, loading } = useWebBuilder();
-  const testimonialsPage = pages.find(
-    (p: Page) => p.pageType === 'testimonials' || p.slug === 'testimonials'
-  );
+  const testimonialsPage = pages.find((p: Page) => p.slug === 'testimonials');
 
   return (
     <div className="min-h-screen flex flex-col">
