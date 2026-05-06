@@ -5,7 +5,29 @@ import { Site, Page, Service, BlogPost, Project } from '@/app/lib/types';
 import { siteApi, pageApi, serviceApi, blogApi, projectApi, testimonialApi, serviceAreaApi } from '@/app/lib/api';
 
 // Site slug from environment variable
-const SITE_SLUG = process.env.NEXT_PUBLIC_WEBBUILDER_SITE_SLUG || 'brightpath-home-services-mm9bo6ed-2n7p';
+const SITE_SLUG = process.env.NEXT_PUBLIC_WEBBUILDER_SITE_SLUG;
+
+/** Parsed poll interval in ms; 0 disables polling. Defaults avoid API rate limits in production. */
+function readPollIntervalMs(envKey: string, defaultMs: number): number {
+  const raw = process.env[envKey];
+  if (raw === undefined || raw === '') return defaultMs;
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 0 ? n : defaultMs;
+}
+
+const isProdBuild = process.env.NODE_ENV === 'production';
+
+/** Site/theme refresh (formerly every 3s — far too aggressive for deployed APIs). */
+const SITE_POLL_INTERVAL_MS = readPollIntervalMs(
+  'NEXT_PUBLIC_WEBBUILDER_SITE_POLL_INTERVAL_MS',
+  isProdBuild ? 0 : 15_000
+);
+
+/** Pages, projects, services refresh (formerly every 5s each). */
+const CONTENT_POLL_INTERVAL_MS = readPollIntervalMs(
+  'NEXT_PUBLIC_WEBBUILDER_CONTENT_POLL_INTERVAL_MS',
+  isProdBuild ? 0 : 60_000
+);
 
 
 
@@ -126,17 +148,15 @@ export const WebBuilderProvider: React.FC<WebBuilderProviderProps> = ({ children
   };
 
   const loadTestimonials = async (siteSlug: string) => {
-    console.log('[WebBuilderProvider] === loadTestimonials START ===', siteSlug);
     try {
-      console.log('[WebBuilderProvider] Calling testimonialApi.getTestimonialsBySite...');
       const testimonialsData = await testimonialApi.getTestimonialsBySite(siteSlug);
-      console.log('[WebBuilderProvider] Testimonials loaded SUCCESS:', testimonialsData);
-      console.log('[WebBuilderProvider] Testimonials count:', testimonialsData?.testimonials?.length || 0);
       setTestimonials(testimonialsData);
     } catch (err) {
-      console.error('[WebBuilderProvider] Testimonials loaded FAILED:', err instanceof Error ? err.message : err);
+      console.warn(
+        '[WebBuilderProvider] Failed to load testimonials:',
+        err instanceof Error ? err.message : err
+      );
     }
-    console.log('[WebBuilderProvider] === loadTestimonials END ===');
   };
 
   const loadServiceAreaPages = async (siteSlug: string) => {
@@ -157,88 +177,78 @@ export const WebBuilderProvider: React.FC<WebBuilderProviderProps> = ({ children
     loadSite(SITE_SLUG);
   }, []);
 
-  // Poll for site updates every 3 seconds to detect theme/color changes from builder
+  // Optional: poll site for theme edits from builder (disabled in production by default — see rate limits)
   useEffect(() => {
-    if (!site?.slug) return;
+    if (!site?.slug || SITE_POLL_INTERVAL_MS <= 0) return;
 
     const intervalId = setInterval(async () => {
       try {
         const siteData = await siteApi.getSiteBySlug(site.slug);
-        setSite(prevSite => {
-          // Only update if theme has changed
+        setSite((prevSite) => {
           if (prevSite && JSON.stringify(prevSite.theme) !== JSON.stringify(siteData.theme)) {
             return siteData;
           }
           return prevSite;
         });
-      } catch (err) {
-        // Silently ignore polling errors to not disrupt user experience
+      } catch {
+        /* ignore polling errors */
       }
-    }, 3000);
+    }, SITE_POLL_INTERVAL_MS);
 
     return () => clearInterval(intervalId);
   }, [site?.slug]);
 
-  // Poll for projects updates every 5 seconds to detect new/updated published projects
   useEffect(() => {
-    if (!site?.slug) return;
+    if (!site?.slug || CONTENT_POLL_INTERVAL_MS <= 0) return;
 
     const intervalId = setInterval(async () => {
       try {
         const projectsData = await projectApi.getProjectsBySite(site.slug);
-        setProjects(prevProjects => {
-          if (JSON.stringify(prevProjects) !== JSON.stringify(projectsData)) {
-            return projectsData;
-          }
-          return prevProjects;
-        });
-      } catch (err) {
-        // Silently ignore polling errors
+        setProjects((prevProjects) =>
+          JSON.stringify(prevProjects) !== JSON.stringify(projectsData)
+            ? projectsData
+            : prevProjects
+        );
+      } catch {
+        /* ignore */
       }
-    }, 5000);
+    }, CONTENT_POLL_INTERVAL_MS);
 
     return () => clearInterval(intervalId);
   }, [site?.slug]);
 
-  // Poll for pages updates every 5 seconds so navigation updates after creating/publishing pages
   useEffect(() => {
-    if (!site?.slug) return;
+    if (!site?.slug || CONTENT_POLL_INTERVAL_MS <= 0) return;
 
     const intervalId = setInterval(async () => {
       try {
         const pagesData = await pageApi.getPagesBySite(site.slug);
-        setPages(prevPages => {
-          if (JSON.stringify(prevPages) !== JSON.stringify(pagesData)) {
-            return pagesData;
-          }
-          return prevPages;
-        });
-      } catch (err) {
-        // Silently ignore polling errors
+        setPages((prevPages) =>
+          JSON.stringify(prevPages) !== JSON.stringify(pagesData) ? pagesData : prevPages
+        );
+      } catch {
+        /* ignore */
       }
-    }, 5000);
+    }, CONTENT_POLL_INTERVAL_MS);
 
     return () => clearInterval(intervalId);
   }, [site?.slug]);
 
-  // Poll for services updates every 5 seconds to detect slug and content changes
   useEffect(() => {
-    if (!site?.slug) return;
+    if (!site?.slug || CONTENT_POLL_INTERVAL_MS <= 0) return;
 
     const intervalId = setInterval(async () => {
       try {
         const servicesData = await serviceApi.getServicesBySite(site.slug);
-        setServices(prevServices => {
-          // Only update if services data has changed
-          if (JSON.stringify(prevServices) !== JSON.stringify(servicesData)) {
-            return servicesData;
-          }
-          return prevServices;
-        });
-      } catch (err) {
-        // Silently ignore polling errors
+        setServices((prevServices) =>
+          JSON.stringify(prevServices) !== JSON.stringify(servicesData)
+            ? servicesData
+            : prevServices
+        );
+      } catch {
+        /* ignore */
       }
-    }, 5000);
+    }, CONTENT_POLL_INTERVAL_MS);
 
     return () => clearInterval(intervalId);
   }, [site?.slug]);

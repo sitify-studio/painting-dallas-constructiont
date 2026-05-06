@@ -3,8 +3,8 @@
 import React, { useMemo } from 'react';
 import { Page } from '@/app/lib/types';
 import { TiptapRenderer } from '@/app/components/ui/TiptapRenderer';
-import { getImageSrc } from '@/app/lib/utils';
-import { cn } from '@/app/lib/utils';
+import { getImageSrc, cn } from '@/app/lib/utils';
+import { OptimizedImage } from '@/app/components/ui/OptimizedImage';
 import { useThemeColors, useThemeFonts } from '@/app/hooks/useTheme';
 
 interface GallerySectionProps {
@@ -47,11 +47,12 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ gallerySection, 
                     <div className="md:col-span-7 flex flex-col gap-12 lg:gap-20">
                         {/* Large Focal Image */}
                         <div className="relative aspect-[4/3] overflow-hidden group bg-gray-50">
-                            <img
+                            <OptimizedImage
                                 src={getImageSrc(mainImg.imageUrl)}
-                                alt={mainImg.altText}
-                                className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
-                                loading="lazy"
+                                alt={mainImg.altText || ''}
+                                fill
+                                sizes="(max-width: 768px) 100vw, 58vw"
+                                className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                             />
                         </div>
 
@@ -82,21 +83,23 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ gallerySection, 
                     <div className="md:col-span-5 flex flex-col gap-8 md:pt-16 lg:pt-24">
                         {/* Secondary Image Top (Landscape/Video Aspect) */}
                         <div className="relative aspect-video overflow-hidden group bg-gray-50 shadow-xl">
-                           <img
+                           <OptimizedImage
                                 src={getImageSrc(topSecondaryImg.imageUrl)}
-                                alt={topSecondaryImg.altText}
-                                className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
-                                loading="lazy"
+                                alt={topSecondaryImg.altText || ''}
+                                fill
+                                sizes="(max-width: 768px) 100vw, 42vw"
+                                className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                             />
                         </div>
 
                         {/* Secondary Image Bottom (Taller Aspect) */}
                         <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden group bg-gray-50 shadow-lg z-10">
-                            <img
+                            <OptimizedImage
                                 src={getImageSrc(bottomSecondaryImg.imageUrl)}
-                                alt={bottomSecondaryImg.altText}
-                                className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
-                                loading="lazy"
+                                alt={bottomSecondaryImg.altText || ''}
+                                fill
+                                sizes="(max-width: 768px) 100vw, 42vw"
+                                className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                             />
                         </div>
                     </div>
@@ -109,14 +112,16 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ gallerySection, 
                             <div 
                                 key={img.key} 
                                 className={cn(
-                                    "aspect-square overflow-hidden grayscale hover:grayscale-0 transition-all duration-700",
+                                    "relative aspect-square overflow-hidden grayscale hover:grayscale-0 transition-all duration-700",
                                     i % 2 === 1 ? "md:translate-y-8" : ""
                                 )}
                             >
-                                <img
+                                <OptimizedImage
                                     src={getImageSrc(img.imageUrl)}
-                                    alt={img.altText}
-                                    className="w-full h-full object-cover"
+                                    alt={img.altText || ''}
+                                    fill
+                                    sizes="(max-width: 768px) 50vw, 25vw"
+                                    className="object-cover"
                                 />
                             </div>
                         ))}

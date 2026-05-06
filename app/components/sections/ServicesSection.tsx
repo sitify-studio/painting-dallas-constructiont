@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Page } from '@/app/lib/types';
 import { TiptapRenderer } from '@/app/components/ui/TiptapRenderer';
 import { getImageSrc, cn } from '@/app/lib/utils';
+import { OptimizedImage } from '@/app/components/ui/OptimizedImage';
 import { useThemeColors, useThemeFonts } from '@/app/hooks/useTheme';
 import { useWebBuilder } from '@/app/providers/WebBuilderProvider';
 import { ArrowRight } from 'lucide-react';
@@ -63,11 +64,12 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ servicesSectio
                 >
                   {/* Square Editorial Image */}
                   <div className="relative aspect-square overflow-hidden bg-gray-50 border border-black/5">
-                    <img
+                    <OptimizedImage
                       src={imageUrl}
                       alt={service.name}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
-                      loading="lazy"
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 35vw"
+                      className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                     />
                   </div>
 

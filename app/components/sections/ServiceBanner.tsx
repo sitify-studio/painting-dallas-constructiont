@@ -3,6 +3,7 @@
 import React from 'react';
 import { TiptapRenderer } from '@/app/components/ui/TiptapRenderer';
 import { useThemeColors, useThemeFonts } from '@/app/hooks/useTheme';
+import { getImageSrc } from '@/app/lib/utils';
 
 interface ServiceBannerProps {
     service: any;
@@ -11,10 +12,8 @@ interface ServiceBannerProps {
 // Utility function to get full image URL
 const getFullImageUrl = (url?: string): string | undefined => {
     if (!url) return undefined;
-    if (url.startsWith('http')) return url;
-    if (url.startsWith('/uploads')) return url;
-    if (url.startsWith('/')) return url;
-    return `/uploads/${url}`;
+    const resolved = getImageSrc(url);
+    return resolved || undefined;
 };
 
 export const ServiceBanner: React.FC<ServiceBannerProps> = ({ service }) => {

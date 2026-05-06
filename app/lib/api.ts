@@ -1,5 +1,6 @@
 import { Site, Page, Service, BlogPost, Project } from './types';
 import api from './fetch-api';
+import { getImageSrc } from './utils';
 
 // Site API
 export const siteApi = {
@@ -82,11 +83,7 @@ export const projectApi = {
 export const testimonialApi = {
   getTestimonialsBySite: async (siteSlug: string): Promise<{ title?: string; description?: string; testimonials: any[] }> => {
     const response = await api.get(`/testimonials?siteSlug=${siteSlug}`);
-    console.log('[testimonialApi] Raw response:', response);
-    console.log('[testimonialApi] response.data:', response.data);
-    // Handle both { data: { testimonials: [] } } and { testimonials: [] } structures
     const data = response.data?.data ?? response.data ?? { testimonials: [] };
-    console.log('[testimonialApi] Extracted data:', data);
     return data;
   },
 };
@@ -108,25 +105,8 @@ export const serviceAreaApi = {
 
 // Media API for public access
 export const mediaApi = {
-  getMediaUrl: (path: string): string => {
-    // If already a full URL, return as-is
-    if (path?.startsWith('http')) {
-      const isLocal = /^http:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\d+)?\b/i.test(path);
-      return isLocal ? path : path.replace(/^http:\/\//i, 'https://');
-    }
-    
-    // Remove leading slash and /uploads/ prefix if present
-    let cleanPath = path?.replace(/^\//, '') || '';
-    cleanPath = cleanPath.replace(/^uploads\//, '');
-    
-    if (!cleanPath) return '';
-    
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 
-      (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000');
-    const isLocalBase = /^http:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\d+)?\b/i.test(baseUrl);
-    const httpsBaseUrl = isLocalBase ? baseUrl : baseUrl.replace(/^http:\/\//i, 'https://');
-    return `${httpsBaseUrl}/uploads/${cleanPath}`;
-  },
+  /** Public uploads URL: `{API}/api/uploads/{filename}` (see IMAGE_URL_GUIDE). */
+  getMediaUrl: (path: string): string => getImageSrc(path),
 };
 
 export default api;

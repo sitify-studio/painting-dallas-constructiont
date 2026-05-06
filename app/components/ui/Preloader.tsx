@@ -8,14 +8,24 @@ import { useWebBuilder } from '@/app/providers/WebBuilderProvider';
 const Preloader: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLHeadingElement>(null);
+  const previousBodyOverflowRef = useRef<string>('');
+  const previousHtmlOverflowRef = useRef<string>('');
+  const previousHtmlOverflowYRef = useRef<string>('');
   const [isVisible, setIsVisible] = useState(true);
   const [progress, setProgress] = useState(0);
   const themeColors = useThemeColors();
   const { site } = useWebBuilder();
 
   useEffect(() => {
-    // Lock body scroll
+    // Keep scrollbar gutter space during preloader to avoid final-frame layout shift.
+    previousBodyOverflowRef.current = document.body.style.overflow;
+    previousHtmlOverflowRef.current = document.documentElement.style.overflow;
+    previousHtmlOverflowYRef.current = document.documentElement.style.overflowY;
+
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    document.documentElement.style.overflowY = 'scroll';
+    document.documentElement.classList.add('preloader-active');
 
     const ctx = gsap.context(() => {
       // 1. Branded Logo Reveal
@@ -52,7 +62,13 @@ const Preloader: React.FC = () => {
             ease: 'expo.inOut',
             onComplete: () => {
               setIsVisible(false);
-              document.body.style.overflow = '';
+              // Restore scroll after unmount to avoid scrollbar flicker during fade-out.
+              requestAnimationFrame(() => {
+                document.documentElement.classList.remove('preloader-active');
+                document.body.style.overflow = previousBodyOverflowRef.current;
+                document.documentElement.style.overflow = previousHtmlOverflowRef.current;
+                document.documentElement.style.overflowY = previousHtmlOverflowYRef.current;
+              });
             }
           });
         }
@@ -70,7 +86,10 @@ const Preloader: React.FC = () => {
 
     return () => {
       ctx.revert();
-      document.body.style.overflow = '';
+      document.documentElement.classList.remove('preloader-active');
+      document.body.style.overflow = previousBodyOverflowRef.current;
+      document.documentElement.style.overflow = previousHtmlOverflowRef.current;
+      document.documentElement.style.overflowY = previousHtmlOverflowYRef.current;
     };
   }, []);
 
@@ -82,15 +101,15 @@ const Preloader: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center pointer-events-none"
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center pointer-events-none overflow-hidden"
       style={{ backgroundColor: brandBg }}
       aria-busy="true"
       aria-label="Loading site"
     >
-      <div className="relative flex flex-col items-center max-w-screen-sm px-6">
+      <div className="relative flex flex-col items-center w-full max-w-screen-sm px-6 overflow-hidden">
         <h1
           ref={logoRef}
-          className="text-white text-4xl md:text-6xl lg:text-7xl font-sans font-extralight uppercase text-center"
+          className="text-white text-4xl md:text-6xl lg:text-4xl font-sans font-extralight uppercase text-center max-w-full flex flex-wrap"
           style={{ 
             color: brandText,
             willChange: 'transform, opacity, filter, letter-spacing'

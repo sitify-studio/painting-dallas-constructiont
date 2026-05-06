@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { TiptapRenderer } from '@/app/components/ui/TiptapRenderer';
-import { cn } from '@/app/lib/utils';
+import { cn, getImageSrc } from '@/app/lib/utils';
+import { OptimizedImage } from '@/app/components/ui/OptimizedImage';
 
 interface ServiceDetailsSectionProps {
     service: any;
@@ -12,10 +13,8 @@ interface ServiceDetailsSectionProps {
 // Utility function to get full image URL
 const getFullImageUrl = (url?: string): string | undefined => {
     if (!url) return undefined;
-    if (url.startsWith('http')) return url;
-    if (url.startsWith('/uploads')) return url;
-    if (url.startsWith('/')) return url;
-    return `/uploads/${url}`;
+    const resolved = getImageSrc(url);
+    return resolved || undefined;
 };
 
 export const ServiceDetailsSection: React.FC<ServiceDetailsSectionProps> = ({
@@ -37,9 +36,12 @@ export const ServiceDetailsSection: React.FC<ServiceDetailsSectionProps> = ({
             {/* Featured Image */}
             {service.thumbnailImage?.url && (
                 <div className="mb-8">
-                    <img
+                    <OptimizedImage
                         src={getFullImageUrl(service.thumbnailImage.url) || ''}
                         alt={service.thumbnailImage.altText || service.name}
+                        width={1200}
+                        height={400}
+                        sizes="(max-width: 1024px) 100vw, 66vw"
                         className="w-full h-auto max-h-[400px] object-cover rounded-2xl shadow-lg"
                     />
                 </div>
@@ -102,9 +104,12 @@ export const ServiceDetailsSection: React.FC<ServiceDetailsSectionProps> = ({
                                 )}
                             >
                                 <div className="md:w-1/2">
-                                    <img
+                                    <OptimizedImage
                                         src={getFullImageUrl(image.url) || ''}
                                         alt={image.altText || `${service.name} image ${index + 1}`}
+                                        width={800}
+                                        height={256}
+                                        sizes="(max-width: 768px) 100vw, 50vw"
                                         className="w-full h-64 object-cover rounded-xl shadow-md"
                                     />
                                 </div>

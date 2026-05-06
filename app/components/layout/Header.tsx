@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import { useWebBuilder } from '@/app/providers/WebBuilderProvider';
 import { getImageSrc, cn } from '@/app/lib/utils';
+import { OptimizedImage } from '@/app/components/ui/OptimizedImage';
 import { useThemeColors } from '@/app/hooks/useTheme';
 import { Page } from '@/app/lib/types';
 import gsap from 'gsap';
@@ -88,9 +89,13 @@ export const Header: React.FC = () => {
 
           <Link href="/" className="group flex items-center outline-none">
             {site.theme?.logoUrl ? (
-              <img
+              <OptimizedImage
                 src={getImageSrc(site.theme.logoUrl)}
                 alt={brandName}
+                width={240}
+                height={72}
+                priority
+                sizes="120px"
                 className={cn(
                   "h-12 md:h-10 w-auto transition-all duration-500",
                   isScrolled ? "brightness-100" : "brightness-0 invert"

@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { Page } from '@/app/lib/types';
 import { TiptapRenderer } from '@/app/components/ui/TiptapRenderer';
 import { getImageSrc, cn } from '@/app/lib/utils';
+import { OptimizedImage } from '@/app/components/ui/OptimizedImage';
 import { useThemeColors } from '@/app/hooks/useTheme';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
@@ -178,11 +179,13 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ aboutSection, classN
               className="relative aspect-[4/5] md:aspect-[16/11] lg:aspect-[4/3] overflow-hidden bg-gray-100 group shadow-sm"
             >
               {imageUrl ? (
-                <img
+                <OptimizedImage
                   ref={imageRef}
                   src={imageUrl}
                   alt={aboutSection.title || ''}
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 55vw"
+                  className="object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
               ) : (
                 <div className="w-full h-full bg-[#f4f4f4]" />

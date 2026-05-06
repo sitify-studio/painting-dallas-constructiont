@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Page } from '@/app/lib/types';
 import { TiptapRenderer } from '@/app/components/ui/TiptapRenderer';
 import { getImageSrc, cn } from '@/app/lib/utils';
+import { OptimizedImage } from '@/app/components/ui/OptimizedImage';
 import { useThemeColors, useThemeFonts } from '@/app/hooks/useTheme';
 import { useWebBuilder } from '@/app/providers/WebBuilderProvider';
 import { CardLoader } from '@/app/components/ui/SkeletonLoader';
@@ -52,10 +53,12 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ blogSection, className
                     >
                         {post.featuredImage && (
                             <>
-                                <img
+                                <OptimizedImage
                                     src={getImageSrc(post.featuredImage.url || (post.featuredImage as any))}
                                     alt=""
-                                    className="w-full h-full object-cover grayscale-[0.3] brightness-75"
+                                    fill
+                                    sizes="100vw"
+                                    className="object-cover grayscale-[0.3] brightness-75"
                                 />
                                 {/* Overlay to ensure text readability based on theme */}
                                 <div className="absolute inset-0 bg-black/20" />
@@ -87,10 +90,12 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ blogSection, className
                     <div className="relative group w-full max-w-[320px] mx-auto transition-transform duration-700 ease-out transform group-hover:-translate-y-2">
                          <a href={`/blog/${post.slug}`} className="block relative overflow-hidden aspect-[3/4] shadow-2xl">
                             {post.featuredImage && (
-                                <img
+                                <OptimizedImage
                                     src={getImageSrc(post.featuredImage.url || (post.featuredImage as any))}
                                     alt={post.title}
-                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                    fill
+                                    sizes="320px"
+                                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
                                 />
                             )}
                             {/* "Sold Out" or Status Tag Style */}

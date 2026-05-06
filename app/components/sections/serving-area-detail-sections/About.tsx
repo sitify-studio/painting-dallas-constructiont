@@ -3,6 +3,7 @@
 import React from 'react';
 import { TiptapRenderer } from '@/app/components/ui/TiptapRenderer';
 import { getImageSrc, cn } from '@/app/lib/utils';
+import { OptimizedImage } from '@/app/components/ui/OptimizedImage';
 import { useThemeColors, useThemeFonts } from '@/app/hooks/useTheme';
 
 interface AboutProps {
@@ -28,10 +29,12 @@ export const About: React.FC<AboutProps> = ({ about, className }) => {
       {/* Background Image - Cinematic Full-Width Style */}
       <div className="absolute inset-0 z-0">
         {imageUrl ? (
-          <img
+          <OptimizedImage
             src={imageUrl}
             alt={about.imageAlt || 'Property Background'}
-            className="w-full h-full object-cover"
+            fill
+            sizes="100vw"
+            className="object-cover"
           />
         ) : (
           <div className="w-full h-full bg-neutral-200" />

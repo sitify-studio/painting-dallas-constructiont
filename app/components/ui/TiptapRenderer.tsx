@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { cn } from '@/app/lib/utils';
+import { cn, getImageSrc } from '@/app/lib/utils';
+import { OptimizedImage } from '@/app/components/ui/OptimizedImage';
 import { TiptapContent, TiptapAnyNode, TiptapMark } from '@/app/lib/tiptap-types';
 
 interface TiptapRendererProps {
@@ -21,9 +22,8 @@ const isBlockNode = (node: any): boolean => {
 
 const getFullImageUrl = (url?: string): string | undefined => {
   if (!url) return undefined;
-  if (url.startsWith('http')) return url;
-  if (url.startsWith('/')) return url;
-  return `/uploads/${url}`;
+  const resolved = getImageSrc(url);
+  return resolved || undefined;
 };
 
 // Normalize common malformed structures
@@ -249,13 +249,15 @@ const renderNode = (node: any, key?: React.Key): React.ReactNode => {
     const alt = normalized.attrs?.alt || '';
     const title = normalized.attrs?.title;
     return (
-      <img
+      <OptimizedImage
         key={key}
         src={src}
         alt={alt}
         title={title}
+        width={1200}
+        height={800}
+        sizes="(max-width: 768px) 100vw, 800px"
         className="max-w-full h-auto rounded-lg"
-        loading="lazy"
       />
     );
   }

@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { Page } from '@/app/lib/types';
 import { TiptapRenderer } from '@/app/components/ui/TiptapRenderer';
+import { OptimizedImage } from '@/app/components/ui/OptimizedImage';
 import { getImageSrc, cn } from '@/app/lib/utils';
 import { useThemeColors } from '@/app/hooks/useTheme';
 import { useWebBuilder } from '@/app/providers/WebBuilderProvider';
@@ -96,6 +97,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ hero, className }) => 
   if (!hero?.enabled) return null;
 
   const brandName = (site?.business?.name || site?.name || '').toUpperCase();
+  const primaryCtaHref = hero.primaryCta?.href?.trim();
+  const primaryCtaLabel = hero.primaryCta?.label?.trim();
 
   return (
     <section 
@@ -141,17 +144,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ hero, className }) => 
           )}
 
           {/* Circular Architectural CTA */}
-          {hero.primaryCta && (
+          {primaryCtaHref && primaryCtaLabel && (
             <div ref={ctaRef} className="pt-4">
               <a
-                href={hero.primaryCta.href || '/'}
+                href={primaryCtaHref}
                 className="group inline-flex items-center gap-6"
               >
                 <span 
                   className="text-[10px] font-bold tracking-[0.3em] uppercase transition-colors duration-300"
                   style={{ color: themeColors.primaryButton }}
                 >
-                  {hero.primaryCta.label}
+                  {primaryCtaLabel}
                 </span>
                 <div 
                   className="w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-500 group-hover:bg-current group-hover:scale-110"
@@ -191,10 +194,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ hero, className }) => 
                   autoPlay muted loop playsInline 
                 />
               ) : (
-                <img 
-                  src={getImageSrc(item.url)} 
-                  alt="" 
-                  className="xl:min-h-[500px] h-full w-full object-cover" 
+                <OptimizedImage
+                  src={getImageSrc(item.url)}
+                  alt={item.altText || ''}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="xl:min-h-[500px] h-full w-full object-cover"
                 />
               )}
               <div className="absolute inset-0 bg-black/[0.03] pointer-events-none" />

@@ -4,6 +4,7 @@ import React from 'react';
 import { Page } from '@/app/lib/types';
 import { TiptapRenderer } from '@/app/components/ui/TiptapRenderer';
 import { getImageSrc, cn } from '@/app/lib/utils';
+import { OptimizedImage } from '@/app/components/ui/OptimizedImage';
 import { useThemeColors, useThemeFonts } from '@/app/hooks/useTheme';
 
 interface CustomSectionProps {
@@ -38,10 +39,13 @@ export const CustomSection: React.FC<CustomSectionProps> = ({ section, className
                         {section.images.map((image, index) => {
                             const imageUrl = typeof image === 'string' ? image : (image as any).url || (image as any).fileName || (image as any).filePath;
                             return (
-                                <img
+                                <OptimizedImage
                                     key={index}
                                     src={getImageSrc(imageUrl)}
                                     alt={(image as any).altText || ''}
+                                    width={900}
+                                    height={600}
+                                    sizes="(max-width: 768px) 100vw, 33vw"
                                     className="w-full h-auto rounded-lg shadow-lg"
                                 />
                             );

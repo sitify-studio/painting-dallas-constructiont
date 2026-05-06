@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useWebBuilder } from '@/app/providers/WebBuilderProvider';
@@ -17,9 +18,11 @@ import { CompanyDetailSection } from '@/app/components/sections/CompanyDetailSec
 import { ProjectsSection } from '@/app/components/sections/ProjectsSection';
 import { CTA2Section } from '@/app/components/sections/CTA2Section';
 import { CTA3Section } from '@/app/components/sections/CTA3Section';
-import { ServingAreasSection } from '@/app/components/sections/ServingAreasSection';
 import { GallerySection } from '@/app/components/sections/GallerySection';
+import { ContactSection } from '@/app/components/sections/ContactSection';
+import { BlogSection } from '@/app/components/sections/BlogSection';
 import api from '@/app/lib/fetch-api';
+import { ServiceAreaPage } from '@/app/lib/types';
 
 interface PageSlugClientProps {
   pageSlug: string;
@@ -28,11 +31,10 @@ interface PageSlugClientProps {
 export default function PageSlugClient({ pageSlug: pageSlugProp }: PageSlugClientProps) {
   const params = useParams();
   const pageSlug = params.pageSlug as string || pageSlugProp;
-  const { pages, currentPage, setCurrentPage, loading, error, site } = useWebBuilder();
+  const { pages, currentPage, setCurrentPage, loading, site } = useWebBuilder();
   const themeColors = useThemeColors();
-  const [serviceAreaPage, setServiceAreaPage] = useState<any | null>(null);
+  const [serviceAreaPage, setServiceAreaPage] = useState<ServiceAreaPage | null>(null);
   const [serviceAreaLoading, setServiceAreaLoading] = useState(false);
-  const [serviceAreaError, setServiceAreaError] = useState<string | null>(null);
   const hasAttemptedLoad = useRef(false);
 
   // Load service area page
@@ -41,7 +43,6 @@ export default function PageSlugClient({ pageSlug: pageSlugProp }: PageSlugClien
 
     hasAttemptedLoad.current = true;
     setServiceAreaLoading(true);
-    setServiceAreaError(null);
 
     try {
       const response = await api.get(`/public/sites/${site.slug}/service-areas/${pageSlug}`);
@@ -50,8 +51,8 @@ export default function PageSlugClient({ pageSlug: pageSlugProp }: PageSlugClien
       } else {
         setServiceAreaPage(null);
       }
-    } catch (err) {
-      setServiceAreaError('Failed to load service area page');
+    } catch {
+      setServiceAreaPage(null);
     } finally {
       setServiceAreaLoading(false);
     }
@@ -86,42 +87,77 @@ export default function PageSlugClient({ pageSlug: pageSlugProp }: PageSlugClien
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 text-center" style={{ backgroundColor: themeColors.pageBackground }}>
         <h2 className="text-2xl font-bold mb-2" style={{ color: themeColors.lightPrimaryText }}>Page Not Found</h2>
-        <p style={{ color: themeColors.lightSecondaryText }}>The page "{pageSlug}" could not be found.</p>
-        <a href="/" className="mt-8 hover:underline" style={{ color: themeColors.primaryButton }}>Return Home</a>
+        <p style={{ color: themeColors.lightSecondaryText }}>The page &quot;{pageSlug}&quot; could not be found.</p>
+        <Link href="/" className="mt-8 hover:underline" style={{ color: themeColors.primaryButton }}>Return Home</Link>
       </div>
     );
   }
+
+  const pageType = 'pageType' in displayPage ? displayPage.pageType : undefined;
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: themeColors.pageBackground }}>
       <Header />
 
       <main>
-        <HeroSection hero={displayPage.hero} />
+        {pageType === 'home' && (
+          <>
+            <HeroSection hero={displayPage.hero} />
+            <AboutSection aboutSection={displayPage.aboutSection} />
+            <ServicesSection servicesSection={displayPage.servicesSection} />
+            <GallerySection gallerySection={displayPage.gallerySection} />
+            <TestimonialsSection testimonialsSection={displayPage.testimonialsSection} />
+            <FAQSection faqSection={displayPage.faqSection} />
+            <ContactSection contactSection={displayPage.contactSection} />
+            <BlogSection blogSection={displayPage.blogSection} />
+            <CTASection ctaSection={displayPage.ctaSection} />
+            <WhyChooseUsSection whyChooseUsSection={displayPage.whyChooseUsSection} />
+            <CompanyDetailSection companyDetailSection={displayPage.companyDetailSection} />
+            <ProjectsSection projectsSection={displayPage.projectsSection} />
+            <CTA2Section cta2Section={displayPage.cta2Section} />
+            <CTA3Section cta3Section={displayPage.cta3Section} />
+          </>
+        )}
 
-        <AboutSection aboutSection={displayPage.aboutSection} />
+        {pageType === 'about' && (
+          <>
+            <HeroSection hero={displayPage.hero} />
+            <AboutSection aboutSection={displayPage.aboutSection} />
+            <WhyChooseUsSection whyChooseUsSection={displayPage.whyChooseUsSection} />
+            <CompanyDetailSection companyDetailSection={displayPage.companyDetailSection} />
+            <CTA2Section cta2Section={displayPage.cta2Section} />
+          </>
+        )}
 
-        <CTASection ctaSection={displayPage.ctaSection} />
+        {pageType === 'contact' && (
+          <>
+            <HeroSection hero={displayPage.hero} />
+            <ContactSection contactSection={displayPage.contactSection} />
+          </>
+        )}
 
-        <WhyChooseUsSection whyChooseUsSection={displayPage.whyChooseUsSection} />
+        {pageType === 'service-list' && (
+          <>
+            <HeroSection hero={displayPage.hero} />
+            <ServicesSection servicesSection={displayPage.servicesSection} />
+          </>
+        )}
 
-        <CompanyDetailSection companyDetailSection={displayPage.companyDetailSection} />
+        {pageType === 'blog-list' && (
+          <>
+            <HeroSection hero={displayPage.hero} />
+            <BlogSection blogSection={displayPage.blogSection} />
+          </>
+        )}
 
-        <ProjectsSection projectsSection={displayPage.projectsSection} />
+        {pageType === 'project-detail' && <HeroSection hero={displayPage.hero} />}
 
-       
-
-        <CTA2Section cta2Section={displayPage.cta2Section} />
-
-        <CTA3Section cta3Section={displayPage.cta3Section} />
-
-        <ServicesSection servicesSection={displayPage.servicesSection} />
-
-        <TestimonialsSection testimonialsSection={displayPage.testimonialsSection} />
-         <GallerySection gallerySection={displayPage.gallerySection} />
-        <ServingAreasSection />
-
-        <FAQSection faqSection={displayPage.faqSection} />
+        {(pageType === 'testimonials' || displayPage.slug === 'testimonials') && (
+          <>
+            <HeroSection hero={displayPage.hero} />
+            <TestimonialsSection testimonialsSection={displayPage.testimonialsSection} />
+          </>
+        )}
       </main>
 
       <Footer />

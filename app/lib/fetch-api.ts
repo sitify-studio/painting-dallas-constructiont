@@ -18,6 +18,12 @@ class FetchError extends Error {
 
 const createFetchApi = (baseURL: string, defaultTimeout = 30000) => {
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const devLog = (...args: unknown[]) => {
+    if (process.env.NODE_ENV !== 'production') console.log(...args);
+  };
+
+  /** Coalesces identical concurrent GETs (e.g. Strict Mode, parallel hooks) into one network call. */
+  const pendingGets = new Map<string, Promise<unknown>>();
 
   const request = async <T = any>(
     endpoint: string,
@@ -25,92 +31,112 @@ const createFetchApi = (baseURL: string, defaultTimeout = 30000) => {
     retries = 3
   ): Promise<T> => {
     const { timeout = defaultTimeout, ...fetchOptions } = options;
-    
-    const url = endpoint.startsWith('http') 
-      ? endpoint 
+
+    const url = endpoint.startsWith('http')
+      ? endpoint
       : `${baseURL.replace(/\/$/, '')}/${endpoint.replace(/^\//, '')}`;
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    const method = (fetchOptions.method || 'GET').toUpperCase();
 
-    try {
-      console.log(`[fetch-api] GET ${url}`);
-      
-      const response = await fetch(url, {
-        ...fetchOptions,
-        signal: controller.signal,
-        headers: {
-          'Content-Type': 'application/json',
-          ...fetchOptions.headers,
-        },
-      });
+    /** Retries (incl. 429) must stay inside this function so GET dedupe does not recurse into `request()`. */
+    const execute = async (): Promise<T> => {
+      let remainingRetries = retries;
 
-      clearTimeout(timeoutId);
-      console.log(`[fetch-api] Response status: ${response.status}`);
+      const runOnce = async (): Promise<T> => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
 
-      if (!response.ok) {
-        // Handle 429 rate limit with retry and jitter
-        if (response.status === 429 && retries > 0) {
-          const attempt = 3 - retries; // 1, 2, 3
-          const baseDelay = Math.min(Math.pow(2, attempt) * 1000, 5000); // 1s, 2s, 4s
-          const jitter = Math.random() * 500; // 0-500ms random jitter
-          const delay = baseDelay + jitter;
-          console.warn(`Rate limited (429), retrying in ${Math.round(delay)}ms... (${retries} retries left)`);
-          await sleep(delay);
-          return request<T>(endpoint, options, retries - 1);
-        }
-        
-        // Try to parse error response
-        let errorMessage = `HTTP error! status: ${response.status}`;
         try {
-          const errorData = await response.json();
-          if (errorData.error?.message) {
-            errorMessage = errorData.error.message;
-          }
-        } catch {
-          // Ignore error parsing failures
-        }
-        
-        throw new FetchError(errorMessage, response.status, response);
-      }
+          devLog(`[fetch-api] ${method} ${url}`);
 
-      // Handle empty responses
-      const contentType = response.headers.get('content-type');
-      const text = await response.text();
-      
-      if (!text || text.trim() === '') {
-        console.log(`[fetch-api] Empty response for ${url}`);
-        return {} as T;
-      }
-      
-      if (contentType && contentType.includes('application/json')) {
-        const json = JSON.parse(text);
-        console.log(`[fetch-api] JSON response for ${url}:`, json);
-        return json;
-      }
-      
-      return text as unknown as T;
-    } catch (error) {
-      clearTimeout(timeoutId);
-      
-      if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          console.error(`[fetch-api] Timeout for ${url}`);
-          throw new FetchError('Request timeout', undefined, undefined);
+          const response = await fetch(url, {
+            ...fetchOptions,
+            signal: controller.signal,
+            headers: {
+              'Content-Type': 'application/json',
+              ...fetchOptions.headers,
+            },
+          });
+
+          clearTimeout(timeoutId);
+          devLog(`[fetch-api] Response status: ${response.status}`);
+
+          if (!response.ok) {
+            if (response.status === 429 && remainingRetries > 0) {
+              const attempt = retries - remainingRetries;
+              const baseDelay = Math.min(Math.pow(2, attempt + 1) * 1000, 5000);
+              const jitter = Math.random() * 500;
+              const delay = baseDelay + jitter;
+              console.warn(
+                `Rate limited (429), retrying in ${Math.round(delay)}ms... (${remainingRetries} retries left)`
+              );
+              remainingRetries -= 1;
+              await sleep(delay);
+              return runOnce();
+            }
+
+            let errorMessage = `HTTP error! status: ${response.status}`;
+            try {
+              const errorData = await response.json();
+              if (errorData.error?.message) {
+                errorMessage = errorData.error.message;
+              }
+            } catch {
+              /* ignore */
+            }
+
+            throw new FetchError(errorMessage, response.status, response);
+          }
+
+          const contentType = response.headers.get('content-type');
+          const text = await response.text();
+
+          if (!text || text.trim() === '') {
+            devLog(`[fetch-api] Empty response for ${url}`);
+            return {} as T;
+          }
+
+          if (contentType && contentType.includes('application/json')) {
+            return JSON.parse(text) as T;
+          }
+
+          return text as unknown as T;
+        } catch (error) {
+          clearTimeout(timeoutId);
+
+          if (error instanceof Error) {
+            if (error.name === 'AbortError') {
+              console.error(`[fetch-api] Timeout for ${url}`);
+              throw new FetchError('Request timeout', undefined, undefined);
+            }
+            const isNotFound =
+              error.message?.includes('404') ||
+              error.message?.includes('status: 404') ||
+              error.message?.toLowerCase().includes('not found');
+            if (!isNotFound) {
+              console.error(`[fetch-api] Error for ${url}:`, error.message);
+            }
+            throw new FetchError(error.message, (error as FetchError).status, (error as FetchError).response);
+          }
+
+          console.error(`[fetch-api] Unknown error for ${url}:`, error);
+          throw new FetchError('Unknown error occurred');
         }
-        // Don't log 404 errors or 'not found' errors as they're often expected
-        const isNotFound = error.message?.includes('404') || 
-                          error.message?.includes('status: 404') ||
-                          error.message?.toLowerCase().includes('not found');
-        if (!isNotFound) {
-          console.error(`[fetch-api] Error for ${url}:`, error.message);
-        }
-        throw new FetchError(error.message, (error as FetchError).status, (error as FetchError).response);
+      };
+
+      return runOnce();
+    };
+
+    if (method === 'GET') {
+      let shared = pendingGets.get(url);
+      if (!shared) {
+        shared = execute().finally(() => pendingGets.delete(url)) as Promise<unknown>;
+        pendingGets.set(url, shared);
       }
-      
-      console.error(`[fetch-api] Unknown error for ${url}:`, error);
-      throw new FetchError('Unknown error occurred');
+      return shared as Promise<T>;
     }
+
+    return execute();
   };
 
   return {
@@ -144,7 +170,7 @@ const createFetchApi = (baseURL: string, defaultTimeout = 30000) => {
 };
 
 // Create API instance
-const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || 
+const rawBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 
   (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api');
 
 const isLocalRaw = /^http:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\d+)?\b/i.test(rawBaseUrl);

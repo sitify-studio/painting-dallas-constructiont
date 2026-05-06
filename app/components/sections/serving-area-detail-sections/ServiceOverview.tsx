@@ -3,6 +3,7 @@
 import React from 'react';
 import { TiptapRenderer } from '@/app/components/ui/TiptapRenderer';
 import { getImageSrc, cn } from '@/app/lib/utils';
+import { OptimizedImage } from '@/app/components/ui/OptimizedImage';
 import { useThemeColors, useThemeFonts } from '@/app/hooks/useTheme';
 
 interface ServiceOverviewProps {
@@ -30,10 +31,12 @@ export const ServiceOverview: React.FC<ServiceOverviewProps> = ({ overview, clas
       {/* Background Image Layer */}
       <div className="absolute inset-0 z-0">
         {resolvedImageSrc ? (
-          <img
+          <OptimizedImage
             src={resolvedImageSrc}
             alt={overview.imageAlt || 'Architecture Overview'}
-            className="w-full h-full object-cover opacity-60"
+            fill
+            sizes="100vw"
+            className="object-cover opacity-60"
           />
         ) : (
           <div className="w-full h-full bg-neutral-900" />

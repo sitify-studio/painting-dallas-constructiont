@@ -16,15 +16,12 @@ import { CompanyDetailSection } from '@/app/components/sections/CompanyDetailSec
 import { ProjectsSection } from '@/app/components/sections/ProjectsSection';
 import { CTA2Section } from '@/app/components/sections/CTA2Section';
 import { CTA3Section } from '@/app/components/sections/CTA3Section';
-import { ServingAreasSection } from '@/app/components/sections/ServingAreasSection';
 import { ContactSection } from './components/sections/ContactSection';
 import { GallerySection } from '@/app/components/sections/GallerySection';
+import { BlogSection } from '@/app/components/sections/BlogSection';
 
 export default function HomeClient() {
-  const { site, pages, testimonials, loading, error } = useWebBuilder();
-
-  // Debug testimonials data
-  console.log('HomeClient testimonials:', testimonials);
+  const { site, pages, loading, error } = useWebBuilder();
 
   // Get theme colors from site using the new dynamic CSS variable system
   const themeColors = {
@@ -124,7 +121,7 @@ export default function HomeClient() {
             fontFamily: themeFonts.body
           }}
         >
-          Please create a page with type "home" in the site builder.
+          Please create a page with type &quot;home&quot; in the site builder.
         </p>
       </div>
     );
@@ -143,24 +140,20 @@ export default function HomeClient() {
       <main>
         <HeroSection hero={displayPage.hero} />
 
-        <ServiceHighlightsSection serviceHighlightsSection={displayPage.serviceHighlightsSection} />
-
         <AboutSection aboutSection={displayPage.aboutSection} />
         <ServicesSection servicesSection={displayPage.servicesSection} />
-        <CTASection ctaSection={displayPage.ctaSection} />
-
-        <WhyChooseUsSection whyChooseUsSection={displayPage.whyChooseUsSection} />
-        <CTA3Section cta3Section={displayPage.cta3Section} />
-        <CompanyDetailSection companyDetailSection={displayPage.companyDetailSection} />
-        <ProjectsSection projectsSection={displayPage.projectsSection} />
         <GallerySection gallerySection={displayPage.gallerySection} />
-        <CTA2Section cta2Section={displayPage.cta2Section} />
-        
-
         <TestimonialsSection testimonialsSection={displayPage.testimonialsSection} />
-        <ServingAreasSection />
         <FAQSection faqSection={displayPage.faqSection} />
         <ContactSection contactSection={displayPage.contactSection} />
+        <BlogSection blogSection={displayPage.blogSection} />
+        <CTASection ctaSection={displayPage.ctaSection} />
+        <WhyChooseUsSection whyChooseUsSection={displayPage.whyChooseUsSection} />
+        <CompanyDetailSection companyDetailSection={displayPage.companyDetailSection} />
+        <ProjectsSection projectsSection={displayPage.projectsSection} />
+        <CTA2Section cta2Section={displayPage.cta2Section} />
+        <CTA3Section cta3Section={displayPage.cta3Section} />
+        <ServiceHighlightsSection serviceHighlightsSection={displayPage.serviceHighlightsSection} />
       </main>
       
       <Footer />

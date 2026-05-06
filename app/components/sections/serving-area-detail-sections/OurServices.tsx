@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { TiptapRenderer } from '@/app/components/ui/TiptapRenderer';
 import { getImageSrc, cn } from '@/app/lib/utils';
+import { OptimizedImage } from '@/app/components/ui/OptimizedImage';
 import { useThemeColors, useThemeFonts } from '@/app/hooks/useTheme';
 import { useWebBuilder } from '@/app/providers/WebBuilderProvider';
 import { ArrowUpRight, Check } from 'lucide-react';
@@ -107,10 +108,12 @@ export const OurServices: React.FC<OurServicesProps> = ({ services, className })
               {/* Image Container with Reveal */}
               <div className="relative aspect-[4/5] mb-8 overflow-hidden rounded-[2rem] bg-gray-100">
                 {service.image ? (
-                  <img
+                  <OptimizedImage
                     src={getImageSrc(service.image)}
                     alt={service.title || ''}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center opacity-20">No Image</div>

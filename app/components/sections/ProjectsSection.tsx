@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Page } from '@/app/lib/types';
 import { TiptapRenderer } from '@/app/components/ui/TiptapRenderer';
 import { cn, getImageSrc } from '@/app/lib/utils';
+import { OptimizedImage } from '@/app/components/ui/OptimizedImage';
 import { useThemeColors } from '@/app/hooks/useTheme';
 import { useWebBuilder } from '@/app/providers/WebBuilderProvider';
 import gsap from 'gsap';
@@ -31,7 +32,9 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projectsSectio
     const ctx = gsap.context(() => {
       // Horizontal Scroll Animation
       if (scrollRef.current && containerRef.current) {
-        const scrollWidth = containerRef.current.offsetWidth - window.innerWidth;
+        const scrollWidth = Math.max(containerRef.current.scrollWidth - window.innerWidth, 0);
+
+        if (scrollWidth <= 0) return;
 
         gsap.to(containerRef.current, {
           x: -scrollWidth,
@@ -60,7 +63,11 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projectsSectio
   const displayItems = projectsSection.projects?.length ? projectsSection.projects : publishedProjects;
 
   return (
-    <div ref={scrollRef} className="relative overflow-hidden max-w-full" style={{ backgroundColor: brandColor }}>
+    <div
+      ref={scrollRef}
+      className="relative overflow-x-clip overflow-y-hidden max-w-full"
+      style={{ backgroundColor: brandColor }}
+    >
       {/* Hide horizontal scrollbar across all browsers */}
       <style jsx global>{`
         .scrollbar-hide::-webkit-scrollbar {
@@ -71,9 +78,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projectsSectio
           scrollbar-width: none;
         }
       `}</style>
-      <section
-        className={cn('relative min-h-screen flex flex-col justify-center overflow-hidden', className)}
-      >
+      <section className={cn('relative min-h-screen flex flex-col justify-center overflow-x-clip overflow-y-hidden', className)}>
         <div className="px-8 md:px-16 lg:px-24 mb-12">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-10 h-[1.5px] bg-white/40" />
@@ -89,10 +94,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projectsSectio
         </div>
 
         {/* Horizontal Scrolling Projects Container */}
-        <div className="relative w-full overflow-hidden scrollbar-hide">
+        <div className="relative w-full max-w-full overflow-x-clip overflow-y-visible scrollbar-hide">
           <div
             ref={containerRef}
-            className="flex gap-8 md:gap-10 lg:gap-14 px-8 md:px-16 lg:px-24 w-max max-w-full"
+            className="flex gap-6 md:gap-10 lg:gap-14 px-6 md:px-16 lg:px-24 w-max max-w-full"
           >
             {displayItems.map((item: any, idx) => {
               const imageUrl = getImageSrc(item.featuredImage?.url || item.image?.url || item.image || item.featuredImage);
@@ -103,15 +108,17 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projectsSectio
                 <Link
                   key={idx}
                   href={`/projects/${item.slug || 'detail'}`}
-                  className="group flex flex-col w-[280px] md:w-[320px] lg:w-[360px] shrink-0"
+                  className="group flex flex-col w-[82vw] max-w-[280px] md:w-[320px] lg:w-[360px] shrink-0"
                 >
                   {/* The Card Image Area - Reduced Size & Tighter Aspect Ratio */}
                   <div className="relative aspect-[4/5] overflow-hidden bg-white/5 mb-6">
                     {imageUrl ? (
-                      <img
+                      <OptimizedImage
                         src={imageUrl}
                         alt={titleText}
-                        className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
+                        fill
+                        sizes="(max-width: 768px) 85vw, 360px"
+                        className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
                       />
                     ) : (
                       <div className="w-full h-full bg-white/10" />
