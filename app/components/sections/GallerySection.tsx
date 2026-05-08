@@ -69,7 +69,7 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ gallerySection, 
                                 
                                 {gallerySection.description && (
                                     <div 
-                                        className="mt-4 italic font-medium tracking-[0.1em]"
+                                        className="mt-4 text-sm md:text-base lg:text-lg italic font-medium tracking-[0.06em] leading-relaxed"
                                         style={{ color: themeColors.primaryButton || '#E31E24' }} 
                                     >
                                         <TiptapRenderer content={gallerySection.description} />
