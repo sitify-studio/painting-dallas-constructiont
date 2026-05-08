@@ -92,12 +92,12 @@ export const Header: React.FC = () => {
               <OptimizedImage
                 src={getImageSrc(site.theme.logoUrl)}
                 alt={brandName}
-                width={240}
-                height={72}
+                width={320}
+                height={96}
                 priority
-                sizes="120px"
+                sizes="(max-width: 768px) 180px, 240px"
                 className={cn(
-                  "h-12 md:h-10 w-auto transition-all duration-500",
+                  "h-14 md:h-16 lg:h-20 w-auto transition-all duration-500",
                   isScrolled ? "brightness-100" : "brightness-0 invert"
                 )}
               />
