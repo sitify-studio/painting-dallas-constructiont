@@ -30,6 +30,10 @@
   --wb-text-secondary: #4b5563;
   --wb-text-on-dark: #ffffff;
   --wb-text-on-dark-secondary: #d1d5db;
+  /* Scrollbar tokens: white shades */
+  --wb-scrollbar-track: rgba(255, 255, 255, 0.18);
+  --wb-scrollbar-thumb: rgba(107, 114, 128, 0.85);
+  --wb-scrollbar-thumb-hover: rgba(255, 255, 255, 0.72);
 
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
@@ -63,8 +67,7 @@ body {
 /* Very thin themed scrollbar (global) */
 * {
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--wb-primary) 75%, black 25%)
-    color-mix(in srgb, var(--wb-section-bg-light) 92%, transparent 8%);
+  scrollbar-color: var(--wb-scrollbar-thumb) var(--wb-scrollbar-track);
 }
 
 *::-webkit-scrollbar {
@@ -73,16 +76,16 @@ body {
 }
 
 *::-webkit-scrollbar-track {
-  background: color-mix(in srgb, var(--wb-section-bg-light) 92%, transparent 8%);
+  background: var(--wb-scrollbar-track);
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: color-mix(in srgb, var(--wb-primary) 75%, black 25%);
+  background-color: var(--wb-scrollbar-thumb);
   border-radius: 9999px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background-color: var(--wb-primary-hover);
+  background-color: var(--wb-scrollbar-thumb-hover);
 }
 
 /* During preloader: keep scrollbar space, but hide scrollbar visuals */

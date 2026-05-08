@@ -7,7 +7,6 @@ import { Footer } from '@/app/components/layout/Footer';
 import { HeroSection } from '@/app/components/sections/HeroSection';
 import { AboutSection } from '@/app/components/sections/AboutSection';
 import { ServicesSection } from '@/app/components/sections/ServicesSection';
-import { ServiceHighlightsSection } from '@/app/components/sections/ServiceHighlightsSection';
 import { TestimonialsSection } from '@/app/components/sections/TestimonialsSection';
 import { FAQSection } from '@/app/components/sections/FAQSection';
 import { CTASection } from '@/app/components/sections/CTASection';
@@ -145,7 +144,6 @@ export default function HomeClient() {
         <GallerySection gallerySection={displayPage.gallerySection} />
         <TestimonialsSection testimonialsSection={displayPage.testimonialsSection} />
         <FAQSection faqSection={displayPage.faqSection} />
-        <ContactSection contactSection={displayPage.contactSection} />
         <BlogSection blogSection={displayPage.blogSection} />
         <CTASection ctaSection={displayPage.ctaSection} />
         <WhyChooseUsSection whyChooseUsSection={displayPage.whyChooseUsSection} />
@@ -153,7 +151,7 @@ export default function HomeClient() {
         <ProjectsSection projectsSection={displayPage.projectsSection} />
         <CTA2Section cta2Section={displayPage.cta2Section} />
         <CTA3Section cta3Section={displayPage.cta3Section} />
-        <ServiceHighlightsSection serviceHighlightsSection={displayPage.serviceHighlightsSection} />
+        <ContactSection contactSection={displayPage.contactSection} />
       </main>
       
       <Footer />
