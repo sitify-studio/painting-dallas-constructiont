@@ -146,7 +146,7 @@ export const ServiceContactFormSection: React.FC<ServiceContactFormSectionProps>
               <div className="space-y-6">
                 <span className="text-[10px] uppercase tracking-[0.2em] mb-4 block font-bold opacity-30">Business Hours</span>
                 <div className="space-y-2">
-                  {safeBusinessHours.map((day: any) => (
+                  {safeBusinessHours.filter(Boolean).map((day: any) => (
                     <div key={day.day} className="flex justify-between items-baseline gap-4 text-[11px] uppercase tracking-widest opacity-80 font-light">
                       <span className="font-semibold opacity-60">{DAY_LABELS[day.day] || day.day}</span>
                       <span className="text-right">{formatDayHours(day)}</span>

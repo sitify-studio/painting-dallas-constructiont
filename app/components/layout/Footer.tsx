@@ -11,14 +11,25 @@ export const Footer: React.FC = () => {
   const { site, pages } = useWebBuilder();
   const themeFonts = useThemeFonts();
   const themeColors = useThemeColors();
+  const safePages = Array.isArray(pages) ? pages : [];
 
   const business = site?.business;
   const address = business?.address;
   const legal = site?.legal;
 
   // Find contact page
-  const contactPage = pages.find(p => p.status === 'published' && (p.slug.includes('contact') || p.pageType === 'contact'));
-  const contactUrl = contactPage ? `/${contactPage.slug}` : '#contact';
+  const contactPage = safePages.find(
+    (p) =>
+      p?.status === 'published' &&
+      (
+        (typeof p?.slug === 'string' && p.slug.toLowerCase().includes('contact')) ||
+        p?.pageType === 'contact'
+      )
+  );
+  const contactUrl =
+    contactPage && typeof contactPage.slug === 'string' && contactPage.slug.trim()
+      ? `/${contactPage.slug}`
+      : '#contact';
 
   const hasPhone = business?.phone || business?.emergencyPhone;
   const hasEmail = business?.email || business?.emergencyEmail;
@@ -31,7 +42,7 @@ export const Footer: React.FC = () => {
     return noSlashes.toLowerCase();
   };
 
-  const footerPages = pages
+  const footerPages = safePages
     .filter(page => page.status === 'published')
     .map(page => ({ page, slugKey: normalizeSlug(page.slug) }))
     .filter(({ slugKey }) => Boolean(slugKey))
