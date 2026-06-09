@@ -1,17 +1,20 @@
 import { Site, Page, Service, BlogPost, Project } from './types';
 import api from './fetch-api';
+import { unwrapApiPayload } from './api-response';
+import { normalizePage } from './page-routes';
+import { normalizeProject, normalizeProjects, unwrapApiItem } from './projects';
 import { getImageSrc } from './utils';
 
 // Site API
 export const siteApi = {
   getSiteBySlug: async (slug: string): Promise<Site> => {
     const response = await api.get(`/public/sites/${slug}`);
-    return response.data?.data ?? response.data;
+    return unwrapApiPayload<Site>(response);
   },
   
   getSites: async (): Promise<Site[]> => {
     const response = await api.get('/sites');
-    return response.data?.data ?? response.data;
+    return unwrapApiPayload<Site[]>(response);
   },
 };
 
@@ -19,12 +22,15 @@ export const siteApi = {
 export const pageApi = {
   getPagesBySite: async (siteSlug: string): Promise<Page[]> => {
     const response = await api.get(`/public/sites/${siteSlug}/pages`);
-    return response.data?.data ?? response.data;
+    const raw = unwrapApiPayload<Page[]>(response);
+    const pages = Array.isArray(raw) ? raw : [];
+    return pages.map((page) => normalizePage(page as Page));
   },
   
   getPageBySlug: async (siteSlug: string, pageSlug: string): Promise<Page> => {
     const response = await api.get(`/public/sites/${siteSlug}/pages/${pageSlug}`);
-    return response.data?.data ?? response.data;
+    const page = unwrapApiPayload<Page>(response);
+    return normalizePage(page);
   },
   
   getPage: async (pageId: string): Promise<Page> => {
@@ -37,17 +43,17 @@ export const pageApi = {
 export const serviceApi = {
   getServicesBySite: async (siteSlug: string): Promise<Service[]> => {
     const response = await api.get(`/public/sites/${siteSlug}/services`);
-    return response.data?.data ?? response.data;
+    return unwrapApiPayload<Service[]>(response);
   },
   
   getServiceBySlug: async (siteSlug: string, serviceSlug: string): Promise<Service> => {
     const response = await api.get(`/public/sites/${siteSlug}/services/${serviceSlug}`);
-    return response.data?.data ?? response.data;
+    return unwrapApiPayload<Service>(response);
   },
   
   getServices: async (serviceIds: string[]): Promise<Service[]> => {
     const response = await api.post('/public/services/batch', { serviceIds });
-    return response.data?.data ?? response.data;
+    return unwrapApiPayload<Service[]>(response);
   },
 };
 
@@ -56,12 +62,12 @@ export const blogApi = {
   getPostsBySite: async (siteSlug: string, limit?: number): Promise<BlogPost[]> => {
     const url = limit ? `/public/sites/${siteSlug}/blog?limit=${limit}` : `/public/sites/${siteSlug}/blog`;
     const response = await api.get(url);
-    return response.data?.data ?? response.data;
+    return unwrapApiPayload<BlogPost[]>(response);
   },
   
   getPostBySlug: async (siteSlug: string, postSlug: string): Promise<BlogPost> => {
     const response = await api.get(`/public/sites/${siteSlug}/blog/${postSlug}`);
-    return response.data?.data ?? response.data;
+    return unwrapApiPayload<BlogPost>(response);
   },
 };
 
@@ -70,12 +76,18 @@ export const projectApi = {
   getProjectsBySite: async (siteSlug: string, limit?: number): Promise<Project[]> => {
     const url = limit ? `/public/sites/${siteSlug}/projects?limit=${limit}` : `/public/sites/${siteSlug}/projects`;
     const response = await api.get(url);
-    return response.data?.data ?? response.data;
+    return normalizeProjects(response, siteSlug);
   },
 
   getProjectBySlug: async (siteSlug: string, projectSlug: string): Promise<Project> => {
-    const response = await api.get(`/public/sites/${siteSlug}/projects/${projectSlug}`);
-    return response.data?.data ?? response.data;
+    const path = `/public/sites/${siteSlug}/projects/${projectSlug}`;
+    const response = await api.get(path);
+    const raw = unwrapApiItem(response);
+    const project = normalizeProject(raw, siteSlug);
+    if (!project) {
+      throw new Error(`Project not found: ${projectSlug}`);
+    }
+    return project;
   },
 };
 

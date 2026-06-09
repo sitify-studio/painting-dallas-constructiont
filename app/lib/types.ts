@@ -110,7 +110,12 @@ export interface Site {
       }>;
     }>;
     copyright?: any; // Tiptap JSON
-    showSocialLinks: boolean;
+    showSocialLinks?: boolean;
+    showSocialMediaLinks?: boolean;
+    socialLinks?: Array<{
+      platform: 'facebook' | 'instagram' | 'X' | 'youtube' | 'yelp' | 'linkedin' | 'tiktok' | 'pinterest';
+      url: string;
+    }>;
   };
   contactSection?: {
     enabled: boolean;
@@ -316,15 +321,14 @@ export interface Page {
     enabled: boolean;
     title?: any;
     description?: any;
-    projects?: Array<{
-      title?: any;
-      description?: any;
-      image?: {
-        url: string;
-        altText?: string;
-      };
-      href?: string;
-    }>;
+    projectIds?: string[];
+    /** Legacy CMS field: project id strings or populated project documents */
+    projects?: Array<string | Project | Record<string, unknown>>;
+  };
+  projectSection?: {
+    enabled: boolean;
+    title?: any;
+    description?: any;
   };
   cta2Section?: {
     enabled: boolean;
@@ -360,14 +364,6 @@ export interface Page {
     }>;
     order: number;
   }>;
-  footerOverrides?: {
-    enabled: boolean;
-    links: Array<{
-      label: string;
-      href: string;
-    }>;
-    copyright?: string;
-  };
   createdBy: string;
   createdAt: string;
   updatedAt: string;

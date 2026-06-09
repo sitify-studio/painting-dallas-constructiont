@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useWebBuilder } from '@/app/providers/WebBuilderProvider';
 import { projectApi } from '@/app/lib/api';
+import { isPublishedProject } from '@/app/lib/projects';
 import { Project } from '@/app/lib/types';
 import { Header } from '@/app/components/layout/Header';
 import { Footer } from '@/app/components/layout/Footer';
@@ -28,8 +29,8 @@ export default function ProjectDetailPage() {
   const [error, setError] = useState<string | null>(null);
 
   const otherProjects = useMemo(() => {
-    const published = (projects || []).filter(p => p.status === 'published');
-    return published.filter(p => p.slug !== projectSlug).slice(0, 3);
+    const published = (projects || []).filter(isPublishedProject);
+    return published.filter((p) => p.slug !== projectSlug).slice(0, 3);
   }, [projects, projectSlug]);
 
   useEffect(() => {
