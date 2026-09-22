@@ -1,5 +1,255 @@
 {
-  "heading": "",
-  "description": "",
-  "content": ""
+  "heading": "Privacy Policy",
+  "description": "This Privacy Policy explains how Painting Dallas, a trusted painting solution provider based in Dallas, Texas, collects, uses, and protects your personal information. By using our services, you consent to the practices described herein.",
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "1. Information We Collect"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Personal Information"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "When you request a quote, schedule a project, or contact us, we collect name, email, phone number, address, and any details you share about your painting needs. This information helps us understand your preferences and deliver tailored services."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Technical Data"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "We automatically gather device information, IP address, browser type, and usage patterns through embedded analytics tools. This data improves site functionality and ensures a smooth user experience."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "2. How We Use Your Information"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Service Delivery"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Your data allows us to assess project scope, estimate costs, and schedule appointments. We use it to coordinate with our certified painters and provide accurate, on‑time service."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Communication"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "We send you project updates, promotional offers, and service reminders. You can opt out of marketing communications by following the unsubscribe link in any email or contacting us directly."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "3. Cookies and Similar Technologies"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Our website uses first‑party cookies to remember your login status, preserve items in your cart, and track session activity. Third‑party cookies may appear through embedded services such as maps or payment processors. You can adjust cookie settings in your browser or use the privacy controls on partner sites."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "4. Sharing Your Information"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Third‑Party Service Providers"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "We share minimal data with trusted contractors, payment processors, and marketing agencies to facilitate painting services and secure transactions. All partners sign confidentiality agreements and comply with applicable privacy laws."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Legal Requirements"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "When required by law or in good faith belief that disclosure is necessary to comply with a legal process, protect our rights, or prevent fraud, we may disclose your information. No personal data is sold to third parties."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "5. Data Retention"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "We retain personal information only for as long as necessary to fulfill the purposes described in this policy, unless a longer period is required by law. Project files are archived for up to seven years after completion to support warranty and customer support."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "6. Your Rights and Choices"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "You may request access, correction, or deletion of your personal data by contacting us. If you prefer, you can stop all non‑essential communications or request that we cease using your data for marketing. For any privacy concerns, please reach out through the contact details below."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "7. Contact Us"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "If you have questions about this Privacy Policy or your personal information, contact our Privacy Team at privacy@paintingdallas.com or call (123) 456-7890. We are committed to resolving any concerns promptly."
+          }
+        ]
+      }
+    ]
+  }
 }
