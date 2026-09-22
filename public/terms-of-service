@@ -1,5 +1,294 @@
 {
-  "heading": "",
-  "description": "",
-  "content": ""
+  "heading": "Painting Dallas – Your Trusted Painting Solution Across Dallas, Texas",
+  "description": "These Terms of Service govern your use of the Painting Dallas website and the services we provide. By accessing or using our site, you agree to comply with and be bound by these terms. If you disagree with any part, please refrain from using the site.",
+  "content": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Acceptance of Terms"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "By visiting Painting Dallas, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. Your continued use of our website confirms your consent to accept any changes we may make to these terms."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Agreement to Terms"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "These terms constitute a legally binding contract between you and Painting Dallas, a professional painting contractor based in Dallas, Texas. The agreement covers all interactions with our site and the services we offer."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Modifications"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "We reserve the right to update or modify these Terms at any time. Changes become effective immediately upon posting on the website. Your continued use after any updates indicates your acceptance of the revised terms."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Services Provided"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Painting Dallas specializes in interior and exterior painting for residential and commercial properties. Our certified professionals deliver high‑quality finishes that protect and beautify your home or business."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Scope of Services"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "We provide surface preparation, priming, painting, and cleanup. For large projects, we may also offer color consultations, mockups, and project management. Our work is tailored to each client’s specific needs and preferences."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Service Areas"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "While we proudly serve the Dallas, Texas region, we also accept projects throughout the greater Texas market, including surrounding counties."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "User Obligations"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Accurate Information"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "When requesting a quote or booking a job, you must provide accurate, complete, and up‑to‑date information. Inaccurate data may delay or void the service."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Payment Terms"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Payment is due upon completion of the work unless a payment schedule is otherwise agreed upon. We accept cash, checks, and major credit cards. All payment details are disclosed in the service agreement."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Access to Property"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "You must grant Painting Dallas reasonable access to your property at scheduled times. If access is denied, we reserve the right to reschedule or cancel the appointment."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Disclaimers"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Painting Dallas does not guarantee specific results beyond industry standards. Paint colors may appear slightly different on various surfaces. We provide no warranties for paint brands, only for workmanship as defined in the contract."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Limitation of Liability"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "To the fullest extent permitted by law, Painting Dallas is not liable for indirect, incidental, or consequential damages arising from the use of our services. Our liability for direct damages is limited to the total amount paid for the specific project."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Changes to Terms"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "We may revise these Terms to reflect changes in our services or legal requirements. We will post the updated Terms on our website and update the effective date. Users are responsible for reviewing the Terms regularly."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Contact Information"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "If you have any questions or concerns about these Terms or our services, please contact us:\nPhone: (123) 456‑7890\nEmail: info@paintingdallas.com\nAddress: 123 Main Street, Dallas, Texas (contact details provided for reference only)."
+          }
+        ]
+      }
+    ]
+  }
 }
